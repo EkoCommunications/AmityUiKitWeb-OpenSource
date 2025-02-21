@@ -209,7 +209,7 @@ interface PostContentProps {
 
 export const PostContent = ({
   pageId = '*',
-  post: initialPost,
+  post,
   onClick,
   onPostDeleted,
   category,
@@ -229,7 +229,6 @@ export const PostContent = ({
   const { isDesktop } = useResponsive();
   const { openPopup } = usePopupContext();
   const { confirm } = useConfirmContext();
-  const { post: postData } = usePost(initialPost?.postId);
   const { setDrawerData, removeDrawerData } = useDrawer();
 
   const [shouldSubscribe, setShouldSubscribe] = useState(false);
@@ -243,21 +242,6 @@ export const PostContent = ({
   const { page } = useNavigation();
 
   const elementRef = useRef<HTMLDivElement>(null);
-
-  const post = useMemo(() => {
-    if (initialPost != null && postData != null) {
-      if (dayjs(initialPost?.updatedAt).unix() > dayjs(postData?.updatedAt).unix()) {
-        return initialPost;
-      }
-      return postData;
-    }
-    if (postData != null) {
-      return postData;
-    }
-    if (initialPost != null) {
-      return initialPost;
-    }
-  }, [initialPost, postData]);
 
   const shouldCall = useMemo(() => post?.targetType === 'community', [post?.targetType]);
 

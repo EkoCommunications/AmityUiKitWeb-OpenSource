@@ -1,4 +1,4 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import useComment from '~/social/hooks/useComment';
@@ -28,7 +28,7 @@ import {
 } from '~/helpers/utils';
 import { LoadingIndicator } from '~/core/components/ProgressBar/styles';
 import useSDK from '~/core/hooks/useSDK';
-import useUser from '~/core/hooks/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useFile from '~/core/hooks/useFile';
 import { CommentRepository } from '@amityco/ts-sdk';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
@@ -94,7 +94,7 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
   const { confirm } = useConfirmContext();
   const notification = useNotifications();
 
-  const commentAuthor = useUser(comment?.userId);
+  const { user: commentAuthor, refresh } = useUser({ userId: comment?.userId });
   const commentAuthorAvatar = useFile(commentAuthor?.avatarFileId);
   const { userRoles } = useSDK();
 
@@ -110,6 +110,10 @@ const Comment = ({ commentId, readonly }: CommentProps) => {
       remoteText: getCommentData(comment),
       remoteMarkup: parseMentionsMarkup(getCommentData(comment), comment?.metadata || {}),
     });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   // const [text, setText] = useState((comment?.data as Amity.ContentDataText)?.text || '');
 
