@@ -1,11 +1,11 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import UserProfileForm from '~/social/components/UserProfileForm';
 import BackLink from '~/core/components/BackLink';
 
 import { backgroundImage as UserImage } from '~/icons/User';
-import useUser from '~/core/hooks/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
@@ -35,9 +35,13 @@ const ProfileSettings = ({ userId }: ProfileSettingsProps) => {
 
   const [activeTab, setActiveTab] = useState(Tabs.EDIT_PROFILE);
 
-  const user = useUser(userId);
+  const { user, refresh } = useUser({ userId });
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const notification = useNotifications();
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const handleError = (error: Error) => {
     notification.error({

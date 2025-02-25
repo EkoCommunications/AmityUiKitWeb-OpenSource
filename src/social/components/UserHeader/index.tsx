@@ -1,6 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 
-import useUser from '~/core/hooks/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import useFile from '~/core/hooks/useFile';
 import UIUserHeader from './UIUserHeader';
 import useImage from '~/core/hooks/useImage';
@@ -13,8 +13,12 @@ interface UserHeaderProps {
 }
 
 const UserHeader = ({ userId, children, onClick, isBanned = false }: UserHeaderProps) => {
-  const user = useUser(userId);
+  const { user, refresh } = useUser({ userId });
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   return (
     <UIUserHeader

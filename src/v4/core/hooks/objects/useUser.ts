@@ -9,7 +9,7 @@ export const useUser = ({
   userId?: string | null;
   shouldCall?: boolean;
 }) => {
-  const { item, ...rest } = useLiveObject({
+  const { item, refresh, ...rest } = useLiveObject({
     fetcher: UserRepository.getUser,
     params: userId,
     shouldCall: !!userId && shouldCall,
@@ -17,6 +17,7 @@ export const useUser = ({
 
   return {
     user: item,
+    refresh,
     ...rest,
   };
 };

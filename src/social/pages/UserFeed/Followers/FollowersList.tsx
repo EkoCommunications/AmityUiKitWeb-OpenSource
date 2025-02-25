@@ -1,11 +1,11 @@
 import { FormattedMessage, useIntl } from 'react-intl';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import LoadMore from '~/core/components/LoadMore';
 import EmptyFeedIcon from '~/icons/EmptyFeed';
 import Skeleton from '~/core/components/Skeleton';
 import { isLoadingItem } from '~/utils';
-import useUser from '~/core/hooks/useUser';
+
 import { UserRepository } from '@amityco/ts-sdk';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 
@@ -24,6 +24,7 @@ import useSDK from '~/core/hooks/useSDK';
 import useFollowersCollection from '~/core/hooks/collections/useFollowersCollection';
 import { useConfirmContext } from '~/core/providers/ConfirmProvider';
 import { useNotifications } from '~/core/providers/NotificationProvider';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 
 interface UserItemProps {
   profileUserId: string;
@@ -33,7 +34,7 @@ interface UserItemProps {
 }
 
 export const UserItem = ({ profileUserId, currentUserId, userId, onClick }: UserItemProps) => {
-  const user = useUser(userId);
+  const { user, refresh } = useUser({ userId });
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
   const { onClickUser } = useNavigation();
   const { confirm } = useConfirmContext();
@@ -41,6 +42,10 @@ export const UserItem = ({ profileUserId, currentUserId, userId, onClick }: User
 
   const { formatMessage } = useIntl();
   const { isFlaggedByMe, toggleFlagUser } = useUserFlaggedByMe(userId || undefined);
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const onReportClick = async () => {
     await toggleFlagUser();
