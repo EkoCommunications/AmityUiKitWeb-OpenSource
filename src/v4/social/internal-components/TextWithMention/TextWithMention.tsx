@@ -15,6 +15,8 @@ import { useNavigation } from '~/v4/core/providers/NavigationProvider';
 import { Button } from '~/v4/core/natives/Button/Button';
 import { Typography } from '~/v4/core/components';
 import Truncate from 'react-truncate-markup';
+import { v4 as uuidv4 } from 'uuid';
+
 interface TextWithMentionProps {
   pageId?: string;
   componentId?: string;
@@ -55,7 +57,7 @@ export const TextWithMention = ({
       return (
         <span
           data-qa-anchor={`${pageId}/${componentId}/mention`}
-          key={child.data.userId}
+          key={uuidv4()}
           className={clsx(styles.textWithMention__mention)}
           onClick={() => goToUserProfilePage(child.data.userId)}
           tabIndex={0}

@@ -27,7 +27,7 @@ const UserFeedPostContentSkeleton: React.FC = () => {
   return (
     <>
       {Array.from({ length: 3 }).map((_, index) => (
-        <div className={styles.userFeed_postSkeleton__post}>
+        <div key={index} className={styles.userFeed_postSkeleton__post}>
           <div className={styles.userFeed_postSkeleton__post__header}>
             <div className={styles.userFeed_postSkeleton__post__avatar}></div>
             <div className={styles.userFeed_postSkeleton__post__headerText_wrap}>
