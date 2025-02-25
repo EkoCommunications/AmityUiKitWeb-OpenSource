@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.11.7 (2025-02-25)
+
+
+### Bug Fixes
+
+* update displayName v3 ([c072278](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/c07227897c87ece7ecb3f94bcf9000b912402a79))
+
 ### 3.11.6 (2025-01-14)
 
 

@@ -31,7 +31,7 @@ import {
 } from './styles';
 
 import { isNonNullable } from '~/helpers/utils';
-import useUser from '~/core/hooks/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { UserRepository } from '@amityco/ts-sdk';
 import useFollowersList from '~/core/hooks/useFollowersList';
 import { useCustomComponent } from '~/core/providers/CustomComponentsProvider';
@@ -85,7 +85,7 @@ const UIUserInfo = ({
   followingCount = 0,
   isPrivateNetwork,
 }: UIUserInfoProps) => {
-  const user = useUser(userId);
+  const { user } = useUser({ userId });
   const { formatMessage } = useIntl();
   const { isFlaggedByMe } = useUserFlaggedByMe(userId || undefined);
   const { confirm } = useConfirmContext();
