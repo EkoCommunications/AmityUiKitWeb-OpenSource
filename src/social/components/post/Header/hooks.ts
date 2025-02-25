@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import useUser from '~/core/hooks/useUser';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 import { isAdmin, isModerator } from '~/helpers/permissions';
 import useCommunity from '~/social/hooks/useCommunity';
 import useCommunityPostPermission from '~/social/hooks/useCommunityPostPermission';
@@ -19,14 +20,17 @@ export const usePostHeaderProps = ({
 }) => {
   const { onClickCommunity, onClickUser } = useNavigation();
   const { formatMessage } = useIntl();
-  const user = useUser(post?.postedUserId);
+  const { user, refresh } = useUser({ userId: post?.postedUserId });
 
   const community = useCommunity(post?.targetId);
   const { isModerator: isCommunityModerator } = useCommunityPostPermission({
     community,
     post,
-    userId: post?.postedUserId,
   });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const isCommunityPost = post?.targetType === 'community';
   const postTargetName = isCommunityPost ? community?.displayName : null;

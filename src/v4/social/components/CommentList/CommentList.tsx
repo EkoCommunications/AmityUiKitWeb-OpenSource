@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Comment } from '~/v4/social/components/Comment/Comment';
 import useIntersectionObserver from '~/v4/core/hooks/useIntersectionObserver';
@@ -54,7 +54,7 @@ export const CommentList = ({
   const [intersectionNode, setIntersectionNode] = useState<HTMLDivElement | null>(null);
   const [expanded, setExpanded] = useState(false);
 
-  const { items, loadMore, hasMore, isLoading } = usePaginator({
+  const { items, refresh, loadMore, hasMore, isLoading } = usePaginator({
     fetcher: CommentRepository.getComments,
     params: {
       referenceId,
@@ -79,6 +79,10 @@ export const CommentList = ({
       }
     },
   });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   if (!online) {
     return (
