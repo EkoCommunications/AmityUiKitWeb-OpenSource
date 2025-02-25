@@ -78,8 +78,8 @@ jobs:
         continue-on-error: true
         run: npm publish --tag dev/${{ github.event.pull_request.number }}
 
-      - name: publish on s3
-        uses: jakejarvis/s3-sync-action@master
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ vars.AWS_OIDC_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}

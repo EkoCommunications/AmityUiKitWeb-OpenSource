@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Typography } from '~/v4/core/components';
 import { PostContent, PostContentSkeleton } from '~/v4/social/components/PostContent';
 import { PostMenu } from '~/v4/social/internal-components/PostMenu/PostMenu';
@@ -32,11 +32,15 @@ export function PostDetailPage({ id, hideTarget, category }: PostDetailPageProps
   const { isDesktop } = useResponsive();
   const { onBack } = useNavigation();
   const { themeStyles } = useAmityPage({ pageId });
-  const { post, isLoading: isPostLoading } = usePost(id);
+  const { post, refresh, isLoading: isPostLoading } = usePost(id);
   const { setDrawerData, removeDrawerData } = useDrawer();
   const { community } = useCommunity({
     communityId: post?.targetType === 'community' ? post.targetId : null,
   });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const handleReplyClick = useCallback(
     (comment: Amity.Comment) =>

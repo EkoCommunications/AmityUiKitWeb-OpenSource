@@ -20,6 +20,7 @@ function useLiveObject<TParams, TCallback, TConfig>({
   options?: Amity.LiveObjectOptions<TConfig>;
   shouldCall?: boolean;
   getSubscribedTopic?: () => string;
+  refresh?: () => void;
 }) {
   const { subscribe } = useSDKLiveObjectConnector();
   const [item, setItem] = useState<TCallback | null>(null);
@@ -68,11 +69,31 @@ function useLiveObject<TParams, TCallback, TConfig>({
     };
   }, [params, shouldCall]);
 
+  const refresh = useCallback(() => {
+    if (params == null) return;
+
+    if (unsubscribeTopicRef.current) {
+      unsubscribeTopicRef.current();
+    }
+
+    const { unsubscribe } = subscribe({
+      fetcher,
+      params,
+      callback: callbackFn,
+      refresh: true,
+    });
+
+    unsubscribeTopicRef.current = unsubscribe;
+
+    return () => unsubscribe();
+  }, []);
+
   return {
     item,
     origin,
     isLoading: isLoading || (item == null && error == null),
     error,
+    refresh,
   };
 }
 

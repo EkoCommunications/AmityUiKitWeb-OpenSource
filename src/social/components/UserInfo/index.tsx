@@ -1,7 +1,6 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import useUser from '~/core/hooks/useUser';
 import { useNavigation } from '~/social/providers/NavigationProvider';
 import useFollowCount from '~/core/hooks/useFollowCount';
 import useImage from '~/core/hooks/useImage';
@@ -14,6 +13,7 @@ import useUserSubscription from '~/social/hooks/useUserSubscription';
 import useFollowersSubscription from '~/social/hooks/useFollowersSubscription';
 import useFollowingsSubscription from '~/social/hooks/useFollowingsSubscription';
 import { useNotifications } from '~/core/providers/NotificationProvider';
+import { useUser } from '~/v4/core/hooks/objects/useUser';
 
 interface UserInfoProps {
   userId?: string | null;
@@ -36,8 +36,12 @@ const UserInfo = ({
   const { formatMessage } = useIntl();
   const { onEditUser } = useNavigation();
   const notification = useNotifications();
-  const user = useUser(userId);
+  const { user, refresh } = useUser({ userId });
   const avatarFileUrl = useImage({ fileId: user?.avatarFileId, imageSize: 'small' });
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   useUserSubscription({
     userId,
