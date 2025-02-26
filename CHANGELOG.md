@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 3.11.8 (2025-02-26)
+
+
+### Bug Fixes
+
+* add refresh to liveObject ([454f468](https://github.com/AmityCo/Amity-Social-Cloud-UIKit-Web/commit/454f4680a679bc1e00d1ca9536190584a884de0a))
+
 ### 3.11.7 (2025-02-25)
 
 

@@ -6,6 +6,7 @@ const SDKConnectorLiveObjectContext = createContext({
     params,
     callback = () => {},
     options,
+    refresh = false,
   }: {
     fetcher: (
       params: TParams,
@@ -15,6 +16,7 @@ const SDKConnectorLiveObjectContext = createContext({
     params: TParams;
     callback?: Amity.LiveObjectCallback<TCallback>;
     options?: Amity.LiveObjectOptions<TConfig>;
+    refresh?: boolean;
   }) => {
     return { unsubscribe: () => {} };
   },
@@ -47,6 +49,7 @@ export default function SDKConnectorLiveObjectProvider({
     params,
     callback = () => {},
     options,
+    refresh = false,
   }: {
     fetcher: (
       params: TParams,
@@ -56,9 +59,15 @@ export default function SDKConnectorLiveObjectProvider({
     params: TParams;
     callback?: Amity.LiveObjectCallback<TCallback>;
     options?: Amity.LiveObjectOptions<TConfig>;
+    refresh?: boolean;
   }) => {
     if (currentUserId == null) return { unsubscribe() {} };
     const key = getSubscriberKey(fetcher.name, params);
+
+    if (refresh) {
+      delete responseMap.current[key];
+      delete subscriberMap.current[key];
+    }
 
     if (subscriberMap.current[key]) {
       callback(responseMap.current[key] as Amity.LiveObject<TCallback>);
